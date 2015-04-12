@@ -7,22 +7,12 @@
 
   <!-- <ul class="side-nav fixed"> -->
   <nav class="side-nav fixed">
-    <ul class="tabs">
-      <% board.lists.each do |list| %>
-        <li class="tab"><a class="waves-effect waves-light" href="#<%= list.id %>"><%= list.name %></a></li>
-      <% end %>
-    </ul>
+    <!-- will create tabs here  -->
+    
   </nav>
 
   <div class="content">
-    <% board.lists.each do |list| %>
-      <div id="<%= list.id %>" class="">
-        <ul class="collection">
-          <% list.cards.each do |card| %>
-            <a class="collection-item" href="#"><%= card.name %></a>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <!-- will create collection here -->
+
   </div>
 </div>
