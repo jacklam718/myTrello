@@ -1,0 +1,28 @@
+<div id="boards-show-page">
+  <% board = get_board_by_id(session[:current_board_id]) %>
+
+  <% content_for :nav_button_left do %>
+    <button type="button" name="button">Button</button>
+  <% end %>
+
+  <!-- <ul class="side-nav fixed"> -->
+  <nav class="side-nav fixed">
+    <ul class="tabs">
+      <% board.lists.each do |list| %>
+        <li class="tab"><a class="waves-effect waves-light" href="#<%= list.id %>"><%= list.name %></a></li>
+      <% end %>
+    </ul>
+  </nav>
+
+  <div class="content">
+    <% board.lists.each do |list| %>
+      <div id="<%= list.id %>" class="">
+        <ul class="collection">
+          <% list.cards.each do |card| %>
+            <a class="collection-item" href="#"><%= card.name %></a>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>
