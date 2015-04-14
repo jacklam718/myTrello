@@ -174,6 +174,20 @@ MyTrello.postComment = function(cardId, comment) {
   this.post(path, {text: comment});
 }
 
+MyTrello.search = function(query) {
+  var path = "/search/";
+
+  this.get(path, query);
+}
+
+MyTrello.getSearchResult = function(query) {
+  var path = "/search/";
+
+  return this.get(path, query, function(_result) {
+    return _result;
+  })
+}
+
 function markRead(event) {
   console.log("markread");
   var cardId = event.target.dataset.cardId;
