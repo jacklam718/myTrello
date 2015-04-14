@@ -25,7 +25,18 @@
       MyTrello.loadBoardLists(boardId);
       window.setTimeout(function() {
         $('ul.tabs').tabs()
-      }, 500);
+
+        $("[data-action=mark-read]").on("click", markRead);
+      }, 1000);
+
+      $(".collection-item").click(function() {
+        MyTrello.adCardContent
+      })
     })
+
+
+    // $("[data-action=mark-read]").on("click", function() {
+    //   console.log("sssss");
+    // });
   </script>
 <% end %>

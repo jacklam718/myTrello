@@ -83,7 +83,15 @@ MyTrello.loadListCards = function(listId) {
 
   var appendCardItemToContainer = function(card) {
     $($ulContainer).append(
-      "<a class='collection-item' href='#'>" + card.name + "</a>"
+      "<li class='collection-item'>" +
+        "<a href='#' " + "data-card-id=" + "'" + card.id + "'" + ">" +
+          card.name +
+        "</a>" +
+
+        "<a class='btn waves-effect waves-light mark-read-button' href='#' data-action='mark-read'" + "data-card-id=" + "'"+ card.id + "'" + ">" +
+          "Mark Read" +
+        "</a>" +
+      "</li>"
     )
   }
 
@@ -94,12 +102,85 @@ MyTrello.loadListCards = function(listId) {
   });
 }
 
-MyTrello.markRead = function() {
+// MyTrello.loadCardContentToModal = function(cardId) {
+//   var path = "/cards/" + cardId;
+//
+//   var createCardModal = function(card) {
+//     var $modal = document.createElement("div");
+//     modal.className = "modal"
+//
+//     var $modalContent = document.createElement("div");
+//     $modalContent.className = "modal-content";
+//
+//     var $markReadButton = document.createElement("a");
+//     $markReadButton.className = "btn waves-effect waves-light";
+//     $markReadButton.text = "Mark Read";
+//
+//     var $title = document.createElement("h4");
+//     $title.text = card.name;
+//
+//     $ul = document.createElement("ul");
+//     $ul.className = "collection";
+//
+//     $modal.appendChild($modalContent);
+//     $modalContent.appendChild($title);
+//     $modalContent.appendChild($markReadButton);
+//
+//     cards.labels.forEach(function(label) {
+//
+//     });
+//   }
+//
+//   this.get(path, function(card) {
+//     createCardModal(card)
+//   })
+// }
 
+MyTrello.markRead = function(cardId, boardId) {
+  var path = "/cards/" + cardId + "/labels";
+  var self = this;
+
+  var params = {
+    color: "blue",
+    idBoard: boardId,
+    name: "Read"
+  }
+  console.log(cardId);
+  // post comment
+  this.members.get("me", function(user) {
+    self.postComment(cardId, user.username + " has readed.");
+  })
+
+  this.post(path, params);
 }
 
-MyTrello.markUnread = function() {
+MyTrello.markUnread = function(cardId) {
+  var path = "/cards/" + cardId + "/labels";
+  var self = this;
 
+  this.get(path, function(labels) {
+    labels.forEach(function(label) {
+      if (label.name === "Read") {
+        path = "/labels/" + label.id + "/";
+        self.delete(path, {id: label.id});
+      }
+    })
+  })
+}
+
+MyTrello.postComment = function(cardId, comment) {
+  var path = "/cards/" + cardId + "/actions/comments";
+
+  this.post(path, {text: comment});
+}
+
+function markRead(event) {
+  console.log("markread");
+  var cardId = event.target.dataset.cardId;
+  var pathname = window.location.pathname.split("/");
+  var boardId = pathname[pathname.length-1];
+
+  MyTrello.markRead(cardId, boardId);
 }
 
 MyTrello.login();
