@@ -1,5 +1,13 @@
 <div id="boards-page">
-  <div id="boards" class="row">
-    <!-- will append board items here see boards.js -->
+  <div class="boards-container row">
+    <!-- will append board items here by call loadBoards-->
   </div>
 </div>
+
+<% content_for :javascripts do %>
+  <script>
+    $(document).ready(function() {
+      MyTrello.loadBoards();
+    })
+  </script>
+<% end %>

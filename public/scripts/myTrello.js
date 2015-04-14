@@ -24,10 +24,6 @@ MyTrello.loadBoards = function() {
     $boardsContainer.addClass("row")
   }
 
-  var boards = this.get("/members/me/boards", function(boards) {
-    return boards.responseJSON
-  })
-
   var appendBoardItemToContainer = function(board) {
     $boardsContainer.append(
       "<div class='col s4 m4 l4'>" +
@@ -42,31 +38,33 @@ MyTrello.loadBoards = function() {
     )
   }
 
-  boards.forEach(function(board) {
-    appendBoardItemToContainer(board);
+  this.get("/members/me/boards", function(boards) {
+    boards.forEach(function(board) {
+      appendBoardItemToContainer(board);
+    })
   })
 }
 
 MyTrello.loadBoardLists = function(boardId) {
+  var self = this;
   var path = "/board/" + boardId + "/lists";
 
   var $navbar = $(".side-nav")
   var $tabsContainer = $navbar.append("<ul class='tabs'></ul>").find("ul");
 
-  var lists = this.get(path, function(lists) {
-    return lists.responseJSON;
-  })
-
-  var appendListItemToContainer = function(card) {
+  var appendListItemToContainer = function(list) {
     $tabsContainer.append(
-      "<li> class='tab'>" +
-        "<a class='waves-effect waves-light' href='#" + "'" + ">" + list.name + "</a>" +
+      "<li class='tab'>" +
+        "<a class='waves-effect waves-light' href='#" + list.id + "'" + ">" + list.name + "</a>" +
       "</li>"
     )
   }
 
-  lists.forEach(function(card) {
-    appendCardItemToContainer(card);
+  this.get(path, function(lists) {
+    lists.forEach(function(list) {
+      appendListItemToContainer(list);
+      self.loadListCards(list.id);
+    })
   })
 }
 
@@ -80,13 +78,8 @@ MyTrello.loadListCards = function(listId) {
   $listContainer.id = listId;
   $ulContainer.className = "collection";
 
-  $listContainer.appendChild($ul);
-  $(".content").append($list);
-
-
-  var cards = this.get(path, function(cards) {
-    return cards.responseJSON
-  });
+  $listContainer.appendChild($ulContainer);
+  $(".content").append($listContainer);
 
   var appendCardItemToContainer = function(card) {
     $($ulContainer).append(
@@ -94,9 +87,11 @@ MyTrello.loadListCards = function(listId) {
     )
   }
 
-  cars.forEach(function(card) {
-    appendCardItemToContainer(card);
-  })
+  this.get(path, function(cards) {
+    cards.forEach(function(card) {
+      appendCardItemToContainer(card);
+    })
+  });
 }
 
 MyTrello.markRead = function() {
@@ -107,13 +102,4 @@ MyTrello.markUnread = function() {
 
 }
 
-$(document).ready(function() {
-  MyTrello.login();
-
-  $("#boards-show-page").ready(function() {
-      var pathname = window.location.pathname.split("/");
-      var boardId = pathname[pathname.length-1]
-      console.log(boardId);
-      MyTrello.loadBoardLists(boardId);
-  })
-})
+MyTrello.login();

@@ -16,3 +16,16 @@
 
   </div>
 </div>
+
+<% content_for :javascripts do %>
+  <script>
+    $(document).ready(function() {
+      var pathname = window.location.pathname.split("/");
+      var boardId = pathname[pathname.length-1]
+      MyTrello.loadBoardLists(boardId);
+      window.setTimeout(function() {
+        $('ul.tabs').tabs()
+      }, 500);
+    })
+  </script>
+<% end %>
