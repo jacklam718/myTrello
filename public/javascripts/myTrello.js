@@ -197,4 +197,41 @@ function markRead(event) {
   MyTrello.markRead(cardId, boardId);
 }
 
+function search(event) {
+  var value = event.target.val();
+  var query = {query: {card_fields: {name: value}}};
+  var results = MyTrello.getSearchResult(query);
+
+  var createCardModal = function() {
+    var createCardModal = function(card) {
+    var $modal = document.createElement("div");
+    modal.className = "modal"
+
+    var $modalContent = document.createElement("div");
+    $modalContent.className = "modal-content";
+
+    // var $markReadButton = document.createElement("a");
+    // $markReadButton.className = "btn waves-effect waves-light";
+    // $markReadButton.text = "Mark Read";
+
+    var $title = document.createElement("h4");
+    $title.text = card.name;
+
+    $ul = document.createElement("ul");
+    $ul.className = "collection";
+
+    $modal.appendChild($modalContent);
+    $modalContent.appendChild($title);
+    $modalContent.appendChild($markReadButton);
+
+    cards.labels.forEach(function(label) {
+
+    });
+  }
+
+  this.get(path, function(card) {
+    createCardModal(card)
+  })
+}
+
 MyTrello.login();
